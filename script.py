@@ -30,7 +30,7 @@ def create_commendation(schoolkid, title):
 
     try:
         lessons = Lesson.objects.filter(year_of_study=schoolkid.year_of_study, group_letter=schoolkid.group_letter,
-                                        subject__title=title)
+                                        subject__title=title).order_by('-date')
         if not lessons:
             raise Lesson.DoesNotExist
         
