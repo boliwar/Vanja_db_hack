@@ -34,18 +34,14 @@ def create_commendation(schoolkid, title):
         if not lessons:
             raise Lesson.DoesNotExist
         
-        for lesson in lessons:
-            commendation = Commendation.objects.filter(created=lesson.date, schoolkid=schoolkid, teacher=lesson.teacher)
-            if commendation:
-                continue
-    
-            Commendation.objects.create(text=praise,
-                                        created=lesson.date,
-                                        schoolkid=schoolkid,
-                                        subject=lesson.subject,
-                                        teacher=lesson.teacher,
-                                        )
-            break
+        lesson = random.choice(lessons)
+
+        Commendation.objects.create(text=praise,
+                                    created=lesson.date,
+                                    schoolkid=schoolkid,
+                                    subject=lesson.subject,
+                                    teacher=lesson.teacher,
+                                    )
 
     except Lesson.MultipleObjectsReturned:
         print(f'{title} много значений,уточните запрос.')
