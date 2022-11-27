@@ -32,7 +32,7 @@ def create_commendation(schoolkid, title):
         lessons = Lesson.objects.filter(year_of_study=schoolkid.year_of_study, group_letter=schoolkid.group_letter,
                                         subject__title=title)
         if not lessons:
-            raise Schoolkid.DoesNotExist
+            raise Lesson.DoesNotExist
         
         for lesson in lessons:
             commendation = Commendation.objects.filter(created=lesson.date, schoolkid=schoolkid, teacher=lesson.teacher)
@@ -47,7 +47,7 @@ def create_commendation(schoolkid, title):
                                         )
             break
 
-    except Schoolkid.MultipleObjectsReturned:
+    except Lesson.MultipleObjectsReturned:
         print(f'{title} много значений,уточните запрос.')
-    except Schoolkid.DoesNotExist:
+    except Lesson.DoesNotExist:
         print(f'Не найден {title}')
