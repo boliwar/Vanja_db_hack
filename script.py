@@ -4,7 +4,7 @@ from datacenter.models import Schoolkid, Mark, Chastisement, Lesson, Commendatio
 
 def get_child(fio):
     try:
-        child = Schoolkid.objects.filter(full_name__contains=fio).get()
+        child = Schoolkid.objects.get(full_name__contains=fio)
         if child:
             print(f'Найден: {child.full_name}, {child.birthday} дата рождения')
             return child
