@@ -33,18 +33,24 @@ def create_commendation(schoolkid, title):
     praise = random.choice(('Молодец!', 'Отлично!', 'Хорошо!', 'Гораздо лучше, чем я ожидал!', 'Великолепно!',
                             'Прекрасно!', 'Талантливо!', 'Я поражен!'))
 
-    lessons = Lesson.objects.filter(year_of_study=schoolkid.year_of_study, group_letter=schoolkid.group_letter,
-                                    subject__title=title)
+    try:
+        lessons = Lesson.objects.filter(year_of_study=schoolkid.year_of_study, group_letter=schoolkid.group_letter,
+                                        subject__title=title)
+    
+        for lesson in lessons:
+            commendation = Commendation.objects.filter(created=lesson.date, schoolkid=schoolkid, teacher=lesson.teacher)
+            if commendation:
+                continue
+    
+            Commendation.objects.create(text=praise,
+                                        created=lesson.date,
+                                        schoolkid=schoolkid,
+                                        subject=lesson.subject,
+                                        teacher=lesson.teacher,
+                                        )
+            break
 
-    for lesson in lessons:
-        commendation = Commendation.objects.filter(created=lesson.date, schoolkid=schoolkid, teacher=lesson.teacher)
-        if commendation:
-            continue
-
-        Commendation.objects.create(text=praise,
-                                    created=lesson.date,
-                                    schoolkid=schoolkid,
-                                    subject=lesson.subject,
-                                    teacher=lesson.teacher,
-                                    )
-        break
+    except Schoolkid.MultipleObjectsReturned:
+        print(f'{title} много значений,уточните запрос.')
+    except Schoolkid.DoesNotExist:
+        print(f'Не найден {title}')
