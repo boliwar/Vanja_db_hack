@@ -17,10 +17,7 @@ def get_child(fio):
 
 
 def fix_marks(schoolkid):
-    marks = Mark.objects.filter(schoolkid=schoolkid, points__lte=3)
-    for mark in marks:
-        mark.points = 5
-        mark.save()
+    Mark.objects.filter(schoolkid=schoolkid, points__lte=3).update(points=5)
 
 
 def remove_chastisements(schoolkid):
